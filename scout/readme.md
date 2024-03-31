@@ -1,0 +1,3 @@
+# Scout
+
+The Engine itself.
