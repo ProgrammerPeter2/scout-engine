@@ -10,13 +10,19 @@ endif ()
 
 if (MSVC)
     add_compile_definitions(SC_PLATFORM_WINDOWS SC_BUILD_DLL)
-elseif (UNIX)
+elseif (LINUX)
     add_compile_definitions(SC_PLATFORM_LINUX SC_BUILD_DLL)
+elseif (APPLE)
+    add_compile_definitions(SC_PLATFORM_MACOS)
 endif ()
+add_subdirectory(vendor)
 add_library(scout SHARED Scout.h
         Scout/Core.h
         Scout/Application.cpp
         Scout/Application.h
-        Scout/EntryPoint.h)
+        Scout/EntryPoint.h
+        Scout/Log.cpp
+        Scout/Log.h)
+target_include_directories(scout PUBLIC vendor/spdlog/include)
 set_target_properties(scout PROPERTIES PUBLIC_HEADER Scout.h)
 set_target_properties(scout PROPERTIES LINKER_LANGUAGE CXX)

@@ -2,7 +2,7 @@
 #include <iostream>
 
 void HikeApp::Run() {
-     std::cout << "Welcome to Scout Engine!" << std::endl;
+    Scout::Log::GetClientLogger()->trace("Hello from Hike!");
 }
 
 Scout::Application* Scout::CreateApplication() {
