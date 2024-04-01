@@ -18,8 +18,12 @@ if (MSVC)
     add_custom_command(TARGET hike POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
         "${CMAKE_BINARY_DIR}/scout/scout.dll" "${CMAKE_CURRENT_BINARY_DIR}/scout.dll")
-elseif (UNIX)
+elseif (LINUX)
     add_custom_command(TARGET hike POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy
             "${CMAKE_BINARY_DIR}/scout/libscout.so" "${CMAKE_CURRENT_BINARY_DIR}/libscout.so")
+elseif (APPLE)
+    add_custom_command(TARGET hike POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy
+            "${CMAKE_BINARY_DIR}/scout/libscout.dylib" "${CMAKE_CURRENT_BINARY_DIR}/libscout.dylib")
 endif ()

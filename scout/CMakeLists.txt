@@ -3,6 +3,11 @@ cmake_minimum_required(VERSION 3.27)
 project(scout)
 
 set(CMAKE_CXX_STANDARD 17)
+if (APPLE)
+    set(CMAKE_CXX_VISIBILITY_PRESET default)
+    set(CMAKE_VISIBILITY_INLINES_HIDDEN 0)
+endif ()
+
 if (MSVC)
     add_compile_definitions(SC_PLATFORM_WINDOWS SC_BUILD_DLL)
 elseif (UNIX)

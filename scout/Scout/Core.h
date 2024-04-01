@@ -12,4 +12,6 @@
     #else
         #define SCOUT_API __attribute__((dllimport))
     #endif
+#elifdef SC_PLATFORM_MACOS
+    #define SCOUT_API
 #endif
