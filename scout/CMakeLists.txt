@@ -22,7 +22,11 @@ add_library(scout SHARED Scout.h
         Scout/Application.h
         Scout/EntryPoint.h
         Scout/Log.cpp
-        Scout/Log.h)
+        Scout/Log.h
+        Scout/Events/Event.h
+        Scout/Events/ApplicationEvent.h
+        Scout/Events/KeyEvent.h
+        Scout/Events/MouseEvent.h)
 target_include_directories(scout PUBLIC vendor/spdlog/include)
 set_target_properties(scout PROPERTIES PUBLIC_HEADER Scout.h)
 set_target_properties(scout PROPERTIES LINKER_LANGUAGE CXX)
