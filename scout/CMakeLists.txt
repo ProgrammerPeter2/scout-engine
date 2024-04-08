@@ -26,7 +26,12 @@ add_library(scout SHARED Scout.h
         Scout/Events/Event.h
         Scout/Events/ApplicationEvent.h
         Scout/Events/KeyEvent.h
-        Scout/Events/MouseEvent.h)
-target_include_directories(scout PUBLIC vendor/spdlog/include)
+        Scout/Events/MouseEvent.h
+        Scout/Window.h
+        Scout/Platforms/platform.h
+        Scout/Platforms/OpenGL/GLWindow.cpp
+        Scout/Platforms/OpenGL/GLWindow.h)
+target_include_directories(scout PUBLIC vendor/spdlog/include vendor/glfw/include vendor/glad)
+target_link_libraries(scout PUBLIC ${OPENGL_LIBRARIES} glfw glad)
 set_target_properties(scout PROPERTIES PUBLIC_HEADER Scout.h)
 set_target_properties(scout PROPERTIES LINKER_LANGUAGE CXX)

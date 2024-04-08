@@ -15,3 +15,5 @@
 #elif defined SC_PLATFORM_MACOS
     #define SCOUT_API
 #endif
+
+

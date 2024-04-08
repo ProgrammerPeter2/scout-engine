@@ -1,3 +1,6 @@
 [submodule "scout/vendor/spdlog"]
 	path = scout/vendor/spdlog
 	url = git@github.com:gabime/spdlog.git
+[submodule "scout/vendor/glfw"]
+	path = scout/vendor/glfw
+	url = git@github.com:glfw/glfw.git

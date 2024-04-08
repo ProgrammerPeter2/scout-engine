@@ -13,4 +13,12 @@ namespace Scout {
     void Application::Run() {
         while (true);
     }
+
+    Window *Application::new_window(int width, int height, char* title) {
+        return CreateWindow(WindowProps{width, height, title, BIND_EVENT_FN(EventHandle)});
+    }
+
+    void Application::EventHandle(Event &event) {
+        this->OnEvent(event);
+    }
 } // Scout
