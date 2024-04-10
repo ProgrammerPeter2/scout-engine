@@ -16,12 +16,13 @@ namespace Scout {
     public:
         virtual void close() = 0;
         virtual void render() = 0;
+
+        static Window* Create(WindowProps props);
     protected:
         int width, height;
         std::function<void(Event&)> event_callback;
         Window(WindowProps props)
             : width(props.width), height(props.height), event_callback(props.event_callback) {}
-    };
 
-    extern SCOUT_API Window* CreateWindow(WindowProps props);
+    };
 }

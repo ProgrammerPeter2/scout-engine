@@ -15,7 +15,7 @@ namespace Scout {
     }
 
     Window *Application::new_window(int width, int height, char* title) {
-        return CreateWindow(WindowProps{width, height, title, BIND_EVENT_FN(EventHandle)});
+        return Window::Create(WindowProps{width, height, title, BIND_EVENT_FN(EventHandle)});
     }
 
     void Application::EventHandle(Event &event) {

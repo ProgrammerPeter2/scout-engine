@@ -10,10 +10,7 @@ class GLWindow: public Window {
         void close() override;
 
         void render() override;
-
     private:
         GLFWwindow *window;
     };
-
-    Window *CreateWindow(WindowProps props);
 }

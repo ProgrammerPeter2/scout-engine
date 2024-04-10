@@ -42,6 +42,6 @@ void Scout::GLWindow::render() {
     glfwPollEvents();
 }
 
-Scout::Window* Scout::CreateWindow(Scout::WindowProps props) {
+Scout::Window* Scout::Window::Create(Scout::WindowProps props) {
     return new Scout::GLWindow(props);
 }
