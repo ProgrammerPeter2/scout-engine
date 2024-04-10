@@ -2,6 +2,8 @@
 #include <iostream>
 #include "../../Log.h"
 #include "../../Events/ApplicationEvent.h"
+#include "../../Events/KeyEvent.h"
+#include "../../Events/MouseEvent.h"
 
 Scout::GLWindow::GLWindow(Scout::WindowProps props)
     : Scout::Window(props) {
@@ -27,6 +29,51 @@ Scout::GLWindow::GLWindow(Scout::WindowProps props)
         WindowCloseEvent close_event;
         Scout::GLWindow& current_window = *(Scout::GLWindow*)glfwGetWindowUserPointer(window);
         current_window.event_callback(close_event);
+    });
+    glfwSetKeyCallback(this->window, [](GLFWwindow* window, int key, int scancode, int action, int mods){
+        Scout::GLWindow& current_window = *(Scout::GLWindow*)glfwGetWindowUserPointer(window);
+        switch (action) {
+            case GLFW_PRESS: {
+                KeyPressedEvent presse(key, 0);
+                current_window.event_callback(presse);
+                break;
+            }
+            case GLFW_RELEASE: {
+                KeyReleasedEvent revent(key);
+                current_window.event_callback(revent);
+                break;
+            }
+            case GLFW_REPEAT: {
+                KeyPressedEvent repvent(key, 1);
+                current_window.event_callback(repvent);
+                break;
+            }
+        }
+    });
+    glfwSetMouseButtonCallback(this->window, [](GLFWwindow* window, int button, int action, int mods){
+        Scout::GLWindow& current_window = *(Scout::GLWindow*)glfwGetWindowUserPointer(window);
+        switch (action) {
+            case GLFW_PRESS: {
+                MouseButtonPressedEvent event(button);
+                current_window.event_callback(event);
+                break;
+            }
+            case GLFW_RELEASE: {
+                MouseButtonReleasedEvent event(button);
+                current_window.event_callback(event);
+                break;
+            }
+        }
+    });
+    glfwSetScrollCallback(this->window, [](GLFWwindow* window, double xOffset, double yOffset){
+        Scout::GLWindow& current_window = *(Scout::GLWindow*)glfwGetWindowUserPointer(window);
+        MouseScrolledEvent scroll((float)xOffset, (float)yOffset);
+        current_window.event_callback(scroll);
+    });
+    glfwSetCursorPosCallback(this->window, [](GLFWwindow* window, double x, double y) {
+        Scout::GLWindow& current_window = *(Scout::GLWindow*)glfwGetWindowUserPointer(window);
+        MouseMovedEvent moved((float)x, (float)y);
+        current_window.event_callback(moved);
     });
 }
 
