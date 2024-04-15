@@ -10,16 +10,14 @@ void HikeApp::Run() {
 
 HikeApp::HikeApp() {
     this->window = this->new_window(1280, 720, "Hike");
+    this->dispatcher.AddEventHandler(new Scout::EventTypeFilter(Scout::EventType::WindowClosed),
+                                     BIND_EVENT_FN(HikeApp, WindowClosed));
 }
 
-void HikeApp::OnEvent(Scout::Event& event) {
-    if(event.GetEventType() == Scout::EventType::WindowClosed) {
-        Scout::Log::GetClientLogger()->trace("Closing!");
-        this->running = false;
-    }
-    Scout::Log::GetClientLogger()->trace(event.ToString());
+void HikeApp::WindowClosed(Scout::Event &event) {
+    if(event.GetEventType() != Scout::EventType::WindowClosed) return;
+    this->running = false;
 }
-
 
 Scout::Application* Scout::CreateApplication() {
     return new HikeApp();

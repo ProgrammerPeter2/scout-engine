@@ -2,8 +2,9 @@
 #include "Window.h"
 #include "Core.h"
 #include "Events/Event.h"
+#include "Events/EventDispatcher.h"
 #include <functional>
-#define BIND_EVENT_FN(method) std::bind(&Application::method, this, std::placeholders::_1)
+#define BIND_EVENT_FN(_class, method) std::bind(&_class::method, this, std::placeholders::_1)
 
 namespace Scout {
 
@@ -11,12 +12,12 @@ namespace Scout {
     public:
         Application();
         virtual ~Application();
-
         virtual void Run();
-        virtual void OnEvent(Event& event) = 0;
     protected:
         Window* new_window(int width, int height, char* title);
-        void EventHandle(Event& event);
+        EventDispatcher dispatcher;
+        void OnEvent(Event& event);
+        void OnWindowClose( Event& event);
     };
 
     SCOUT_API Application* CreateApplication();
