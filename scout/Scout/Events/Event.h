@@ -7,8 +7,8 @@
 
 namespace Scout {
     /**
- *  Enum for categorizing different events.
- */
+     *  Enum for categorizing different events.
+     */
     enum EventCategory {
         ApplicationEventCategory = BIT(0),
         InputEventCategory = BIT(1),
@@ -31,6 +31,7 @@ namespace Scout {
 
 #define EVENT_CLASS_CATEGORY(category) virtual int GetCategoryFlags() const override {return category; }
 
+    class Window;
     class SCOUT_API Event {
     public:
         virtual ~Event() = default;
@@ -45,5 +46,10 @@ namespace Scout {
         bool IsInCategory(EventCategory category) {
             return GetCategoryFlags() & category;
         }
+
+        Window* GetEventWindow() { return window; }
+    protected:
+        Window* window;
+        explicit Event(Window *window) : window(window) {}
     };
 }

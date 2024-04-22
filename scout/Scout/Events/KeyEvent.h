@@ -10,16 +10,16 @@ namespace Scout {
         EVENT_CLASS_CATEGORY(KeyEventCategory | InputEventCategory)
 
     protected:
-        KeyEvent(int key)
-            : m_key(key) {};
+        KeyEvent(Window* window, int key)
+            : Event(window), m_key(key) {};
 
         int m_key;
     };
 
     class SCOUT_API KeyPressedEvent: public KeyEvent {
     public:
-        KeyPressedEvent(int key, int repeats)
-            : KeyEvent(key), m_Repeats(repeats) {};
+        KeyPressedEvent(Window* window, int key, int repeats)
+            : KeyEvent(window, key), m_Repeats(repeats) {};
 
         inline int GetRepeatCount() const { return m_Repeats; };
 
@@ -37,8 +37,8 @@ namespace Scout {
 
     class SCOUT_API KeyReleasedEvent: public KeyEvent {
     public:
-        KeyReleasedEvent(int key)
-            : KeyEvent(key) {};
+        KeyReleasedEvent(Window* window, int key)
+            : KeyEvent(window, key) {};
 
         std::string ToString() const override {
             std::stringstream ss;

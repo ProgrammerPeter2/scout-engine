@@ -6,7 +6,10 @@ public:
     HikeApp();
     void Run() override;
 private:
-    Scout::Window* window;
+    Scout::Window* root_window;
+    Scout::Window* sub_window;
     bool running = true;
-    void WindowClosed(Scout::Event& event);
+    bool sub_render = true;
+    void MainWindowClosed(Scout::Event& event);
+    void SubWindowClosed(Scout::Event& event);
 };

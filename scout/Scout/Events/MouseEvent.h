@@ -4,7 +4,8 @@
 namespace Scout {
     class SCOUT_API MouseMovedEvent : public Event {
     public:
-        MouseMovedEvent(float mMouseX, float mMouseY) : m_MouseX(mMouseX), m_MouseY(mMouseY) {}
+        MouseMovedEvent(Window* window, float mMouseX, float mMouseY) :
+                Event(window) , m_MouseX(mMouseX), m_MouseY(mMouseY) {}
 
         inline float GetX() const {return m_MouseX;}
         inline float GetY() const {return m_MouseY;}
@@ -24,7 +25,8 @@ namespace Scout {
 
     class SCOUT_API MouseScrolledEvent : public Event {
     public:
-        MouseScrolledEvent(float xOffset, float yOffset) : m_XOffset(xOffset), m_YOffset(yOffset) {}
+        MouseScrolledEvent(Window* window, float xOffset, float yOffset)
+            : Event(window), m_XOffset(xOffset), m_YOffset(yOffset) {}
 
         inline float GetXOffset() const {return m_XOffset;}
         inline float GetYOffset() const {return m_YOffset;}
@@ -49,13 +51,13 @@ namespace Scout {
 
         EVENT_CLASS_CATEGORY(MouseButtonEventCategory | MouseEventCategory | InputEventCategory)
     protected:
-        explicit MouseButtonEvent(int button) : m_Button(button) {}
+        explicit MouseButtonEvent(Window* window, int button) : Event(window), m_Button(button) {}
         int m_Button;
     };
 
     class MouseButtonPressedEvent: public MouseButtonEvent {
     public:
-        explicit MouseButtonPressedEvent(int button) : MouseButtonEvent(button) {}
+        explicit MouseButtonPressedEvent(Window* window, int button) : MouseButtonEvent(window, button) {}
 
         std::string ToString() const override {
             std::stringstream ss;
@@ -68,7 +70,7 @@ namespace Scout {
 
     class MouseButtonReleasedEvent: public MouseButtonEvent {
     public:
-        explicit MouseButtonReleasedEvent(int button) : MouseButtonEvent(button) {}
+        explicit MouseButtonReleasedEvent(Window* window, int button) : MouseButtonEvent(window, button) {}
 
         std::string ToString() const override {
             std::stringstream ss;

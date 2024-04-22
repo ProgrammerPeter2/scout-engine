@@ -8,7 +8,6 @@ class GLWindow: public Window {
         explicit GLWindow(WindowProps props);
 
         void close() override;
-
         void render() override;
     private:
         GLFWwindow *window;

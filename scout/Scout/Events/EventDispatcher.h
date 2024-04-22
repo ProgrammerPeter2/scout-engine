@@ -7,12 +7,18 @@
 namespace Scout {
     class SCOUT_API EventFilter {
     public:
-        virtual bool applyFilter(Event& event) = 0;
+        bool filter(Event &event){
+            return ((this->window != nullptr) ? event.GetEventWindow() == this->window : true) && this->applyFilter(event);
+        }
+    protected:
+        Window* window;
+        virtual bool applyFilter(Event& event) { return true; };
+        explicit EventFilter(Window *window) : window(window) {}
     };
 
     class SCOUT_API EventTypeFilter: public EventFilter {
     public:
-        explicit EventTypeFilter(EventType eventType) : eventType(eventType) {}
+        EventTypeFilter(EventType eventType, Window* window= nullptr) : EventFilter(window), eventType(eventType) {}
         bool applyFilter(Event &event) override {
             return event.GetEventType() == eventType;
         }
@@ -22,7 +28,7 @@ namespace Scout {
 
     class SCOUT_API EventCategoryFilter: public EventFilter {
     public:
-        explicit EventCategoryFilter(EventCategory category) : category(category) {}
+        EventCategoryFilter(EventCategory category, Window* window= nullptr) : EventFilter(window), category(category) {}
         bool applyFilter(Event &event) override {
             return event.IsInCategory(category);
         }
@@ -45,7 +51,7 @@ namespace Scout {
         };
         void HandleEvent(Event& event) {
             for(const auto& [filter, handlers] : event_handlers) {
-                if (!filter->applyFilter(event)) continue;
+                if (!filter->filter(event)) continue;
                 for (const auto& handler : handlers) {
                     handler(event);
                 }

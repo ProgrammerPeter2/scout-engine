@@ -5,13 +5,18 @@
 #include "../../Events/KeyEvent.h"
 #include "../../Events/MouseEvent.h"
 
+static int windowCount;
+
 Scout::GLWindow::GLWindow(Scout::WindowProps props)
     : Scout::Window(props) {
-    if(!glfwInit()){
-        Log::GetCoreLogger()->error("Failed to initialize glfw for {} window!", props.title);
-        return;
+    if(windowCount == 0){
+        if(!glfwInit()){
+            Log::GetCoreLogger()->error("Failed to initialize glfw for {} window!", props.title);
+            return;
+        }
     }
     this->window = glfwCreateWindow(this->width, this->height, props.title, NULL, NULL);
+    windowCount++;
     glfwMakeContextCurrent(this->window);
     if(!gladLoadGLLoader((GLADloadproc) glfwGetProcAddress)){
         Log::GetCoreLogger()->error("Failed to init glad for {} window!", props.title);
@@ -22,29 +27,29 @@ Scout::GLWindow::GLWindow(Scout::WindowProps props)
         Scout::GLWindow& current_window = *(Scout::GLWindow*)glfwGetWindowUserPointer(window);
         current_window.width = width;
         current_window.height = height;
-        Scout::WindowResizeEvent event(width, height);
+        Scout::WindowResizeEvent event(&current_window, width, height);
         current_window.event_callback(event);
     });
     glfwSetWindowCloseCallback(this->window, [](GLFWwindow* window) {
-        WindowCloseEvent close_event;
         Scout::GLWindow& current_window = *(Scout::GLWindow*)glfwGetWindowUserPointer(window);
+        WindowCloseEvent close_event(&current_window);
         current_window.event_callback(close_event);
     });
     glfwSetKeyCallback(this->window, [](GLFWwindow* window, int key, int scancode, int action, int mods){
         Scout::GLWindow& current_window = *(Scout::GLWindow*)glfwGetWindowUserPointer(window);
         switch (action) {
             case GLFW_PRESS: {
-                KeyPressedEvent presse(key, 0);
+                KeyPressedEvent presse(&current_window, key, 0);
                 current_window.event_callback(presse);
                 break;
             }
             case GLFW_RELEASE: {
-                KeyReleasedEvent revent(key);
+                KeyReleasedEvent revent(&current_window, key);
                 current_window.event_callback(revent);
                 break;
             }
             case GLFW_REPEAT: {
-                KeyPressedEvent repvent(key, 1);
+                KeyPressedEvent repvent(&current_window, key, 1);
                 current_window.event_callback(repvent);
                 break;
             }
@@ -54,12 +59,12 @@ Scout::GLWindow::GLWindow(Scout::WindowProps props)
         Scout::GLWindow& current_window = *(Scout::GLWindow*)glfwGetWindowUserPointer(window);
         switch (action) {
             case GLFW_PRESS: {
-                MouseButtonPressedEvent event(button);
+                MouseButtonPressedEvent event(&current_window, button);
                 current_window.event_callback(event);
                 break;
             }
             case GLFW_RELEASE: {
-                MouseButtonReleasedEvent event(button);
+                MouseButtonReleasedEvent event(&current_window, button);
                 current_window.event_callback(event);
                 break;
             }
@@ -67,18 +72,21 @@ Scout::GLWindow::GLWindow(Scout::WindowProps props)
     });
     glfwSetScrollCallback(this->window, [](GLFWwindow* window, double xOffset, double yOffset){
         Scout::GLWindow& current_window = *(Scout::GLWindow*)glfwGetWindowUserPointer(window);
-        MouseScrolledEvent scroll((float)xOffset, (float)yOffset);
+        MouseScrolledEvent scroll(&current_window, (float)xOffset, (float)yOffset);
         current_window.event_callback(scroll);
     });
     glfwSetCursorPosCallback(this->window, [](GLFWwindow* window, double x, double y) {
         Scout::GLWindow& current_window = *(Scout::GLWindow*)glfwGetWindowUserPointer(window);
-        MouseMovedEvent moved((float)x, (float)y);
+        MouseMovedEvent moved(&current_window, (float)x, (float)y);
         current_window.event_callback(moved);
     });
 }
 
 void Scout::GLWindow::close() {
+    glfwMakeContextCurrent(NULL);
     glfwDestroyWindow(this->window);
+    windowCount--;
+    if(windowCount == 0) glfwTerminate();
 }
 
 void Scout::GLWindow::render() {

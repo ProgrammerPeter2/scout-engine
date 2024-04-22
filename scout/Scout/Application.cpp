@@ -14,7 +14,8 @@ namespace Scout {
     }
 
     Window *Application::new_window(int width, int height, char* title) {
-        return Window::Create(WindowProps{width, height, title, BIND_EVENT_FN(Application, OnEvent)});
+        return Window::Create(WindowProps{width, height, title,
+                                          BIND_EVENT_FN(Application, OnEvent)});
     }
 
     void Application::OnEvent(Event &event) {
@@ -23,6 +24,7 @@ namespace Scout {
 
     void Application::OnWindowClose(Event &event) {
         if(event.GetEventType() != EventType::WindowClosed) return;
+        event.GetEventWindow()->close();
         Log::GetCoreLogger()->trace("Window close!");
     }
 } // Scout

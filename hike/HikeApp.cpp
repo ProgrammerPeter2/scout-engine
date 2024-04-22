@@ -4,19 +4,34 @@
 void HikeApp::Run() {
     Scout::Log::GetClientLogger()->trace("Hello from Hike!");
     while(this->running){
-        this->window->render();
+        this->root_window->render();
+        if(this->sub_render) {
+            Scout::Log::GetClientLogger()->trace("Rendering sub-window!");
+            this->sub_window->render();
+        }
     }
 }
 
 HikeApp::HikeApp() {
-    this->window = this->new_window(1280, 720, "Hike");
-    this->dispatcher.AddEventHandler(new Scout::EventTypeFilter(Scout::EventType::WindowClosed),
-                                     BIND_EVENT_FN(HikeApp, WindowClosed));
+    this->root_window = this->new_window(1280, 720, "Hike");
+    this->sub_window = this->new_window(500, 500, "Hike Sub");
+    this->dispatcher.AddEventHandler(new Scout::EventTypeFilter(Scout::EventType::WindowClosed, this->root_window),
+                                     BIND_EVENT_FN(HikeApp, MainWindowClosed));
+    this->dispatcher.AddEventHandler(new Scout::EventTypeFilter(Scout::EventType::WindowClosed, this->sub_window),
+                                     BIND_EVENT_FN(HikeApp, SubWindowClosed));
 }
 
-void HikeApp::WindowClosed(Scout::Event &event) {
+void HikeApp::MainWindowClosed(Scout::Event &event) {
     if(event.GetEventType() != Scout::EventType::WindowClosed) return;
     this->running = false;
+}
+
+void HikeApp::SubWindowClosed(Scout::Event &event) {
+    if(event.GetEventType() != Scout::EventType::WindowClosed) return;
+    if(event.GetEventWindow() == this->sub_window) {
+        Scout::Log::GetClientLogger()->trace("Closing sub window!");
+        this->sub_render = false;
+    }
 }
 
 Scout::Application* Scout::CreateApplication() {
