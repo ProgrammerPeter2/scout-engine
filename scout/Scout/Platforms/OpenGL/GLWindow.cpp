@@ -8,13 +8,15 @@
 static int windowCount;
 
 Scout::GLWindow::GLWindow(Scout::WindowProps props)
-    : Scout::Window(props) {
+    : Scout::Window(props), title(props.title) {
     if(windowCount == 0){
         if(!glfwInit()){
             Log::GetCoreLogger()->error("Failed to initialize glfw for {} window!", props.title);
             return;
         }
     }
+    glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+
     this->window = glfwCreateWindow(this->width, this->height, props.title, NULL, NULL);
     windowCount++;
     glfwMakeContextCurrent(this->window);
@@ -84,12 +86,16 @@ Scout::GLWindow::GLWindow(Scout::WindowProps props)
 
 void Scout::GLWindow::close() {
     glfwMakeContextCurrent(NULL);
+    Log::GetCoreLogger()->trace("Closing window {}", this->title);
     glfwDestroyWindow(this->window);
     windowCount--;
+    this->window = nullptr;
     if(windowCount == 0) glfwTerminate();
 }
 
 void Scout::GLWindow::render() {
+    if(glfwWindowShouldClose(this->window)) return;
+    Log::GetCoreLogger()->trace("Rendering {}", this->title);
     glfwMakeContextCurrent(this->window);
     glClearColor(1, 0, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT);

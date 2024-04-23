@@ -11,5 +11,6 @@ class GLWindow: public Window {
         void render() override;
     private:
         GLFWwindow *window;
+        char* title;
     };
 }

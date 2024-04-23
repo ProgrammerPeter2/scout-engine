@@ -5,10 +5,7 @@ void HikeApp::Run() {
     Scout::Log::GetClientLogger()->trace("Hello from Hike!");
     while(this->running){
         this->root_window->render();
-        if(this->sub_render) {
-            Scout::Log::GetClientLogger()->trace("Rendering sub-window!");
-            this->sub_window->render();
-        }
+        if(this->sub_render) this->sub_window->render();
     }
 }
 
@@ -29,7 +26,6 @@ void HikeApp::MainWindowClosed(Scout::Event &event) {
 void HikeApp::SubWindowClosed(Scout::Event &event) {
     if(event.GetEventType() != Scout::EventType::WindowClosed) return;
     if(event.GetEventWindow() == this->sub_window) {
-        Scout::Log::GetClientLogger()->trace("Closing sub window!");
         this->sub_render = false;
     }
 }
