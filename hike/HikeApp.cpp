@@ -4,7 +4,7 @@
 void HikeApp::Run() {
     Scout::Log::GetClientLogger()->trace("Hello from Hike!");
     while(this->running){
-        if(Scout::Input::GetKey(341))
+        if(Scout::Input::GetKey(SC_KEY_LEFT_CONTROL))
             Scout::Log::GetCoreLogger()->trace("mouse: {}; {}", Scout::Input::GetMousePos().x, Scout::Input::GetMousePos().y);
         this->root_window->render();
         if(this->sub_render) this->sub_window->render();
