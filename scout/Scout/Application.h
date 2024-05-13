@@ -3,11 +3,8 @@
 #include "Core.h"
 #include "Events/Event.h"
 #include "Events/EventDispatcher.h"
-#include <functional>
-#define BIND_EVENT_FN(_class, method) std::bind(&_class::method, this, std::placeholders::_1)
 
 namespace Scout {
-
     class SCOUT_API Application {
     public:
         Application();

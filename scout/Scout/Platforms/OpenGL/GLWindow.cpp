@@ -95,7 +95,6 @@ void Scout::GLWindow::close() {
 
 void Scout::GLWindow::render() {
     if(glfwWindowShouldClose(this->window)) return;
-    Log::GetCoreLogger()->trace("Rendering {}", this->title);
     glfwMakeContextCurrent(this->window);
     glClearColor(1, 0, 1, 1);
     glClear(GL_COLOR_BUFFER_BIT);

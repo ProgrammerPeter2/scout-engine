@@ -31,7 +31,9 @@ add_library(scout SHARED Scout.h
         Scout/Platforms/platform.h
         Scout/Platforms/OpenGL/GLWindow.cpp
         Scout/Platforms/OpenGL/GLWindow.h
-        Scout/Events/EventDispatcher.h)
+        Scout/Events/EventDispatcher.h
+        Scout/Input.h
+        Scout/Input.cpp)
 target_include_directories(scout PUBLIC vendor/spdlog/include vendor/glfw/include vendor/glad)
 target_link_libraries(scout PUBLIC ${OPENGL_LIBRARIES} glfw glad)
 set_target_properties(scout PROPERTIES PUBLIC_HEADER Scout.h)

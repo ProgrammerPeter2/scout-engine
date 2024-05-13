@@ -1,10 +1,13 @@
 #include "Application.h"
 #include "Log.h"
+#include "Input.h"
 
 namespace Scout {
     Application::Application() {
         this->dispatcher.AddEventHandler(new EventTypeFilter(EventType::WindowClosed),
                                          BIND_EVENT_FN(Application, OnWindowClose));
+        this->dispatcher.AddEventHandler(new EventCategoryFilter(EventCategory::InputEventCategory),
+                                         BIND_STATIC_EVENT_FN(Input, HandleInputEvent));
     }
 
     Application::~Application() {}

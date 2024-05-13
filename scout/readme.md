@@ -76,9 +76,13 @@ To provide the callback use the `BIND_EVENT_FN` (or `BIND_STATIC_EVENT_FN` - WIP
 
 When an event happened, the source window will call the dispatcher's `HandleEvent` method. You can use it for your own ideas too.
 
+#### Checking input state
+When an input event is fired, Scout Engine records the state of pressed buttons (both keyboard and mouse) and the mouse position.
+For checking if a key is pressed call `Scout::Input::GetKey(int key)`, and for mouse button call `Scout::Input::GetMouseButton(int button)`.
+You can get the current mouse position by calling `Scout::Input::GetMousePos`. It returns a `MouseData` struct, which is the container of the x and y mouse position.
 ### A minimal multi-window application
 At the end of the day though not really much changed. You just need to create an application with 1 (or more) windows and create a "run-loop" for it.
-If you want you can also subscribe for events with your custom event processors to interact with users.
+If you want you can also subscribe for events with your custom event processors to interact with users (and you can also check the input state).
 
 But first, you'll need a header for your application:
 ```c++
@@ -121,6 +125,11 @@ WindowApp::WindowApp(){
 // just render the two windows until the app is running
 void WindowApp::Run() {
     while(this->running){
+        // check if the control key is pressed
+        if(Scout::Input::GetKey(341)) {
+            auto mouse_pos = Scout::Input::GetMousePos(); // get the mouse pos as a var
+            Scout::Log::GetClientLogger->trace("mouse X: {}, Y: {}", mouse_pos.x, mouse_pos.y);
+        }   
         this->window1->render();
         this->window2->render();
     }

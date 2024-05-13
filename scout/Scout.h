@@ -5,3 +5,4 @@
 #include "Scout/Window.h"
 #include "Scout/Platforms/platform.h"
 #include "Scout/EntryPoint.h"
+#include "Scout/Input.h"
